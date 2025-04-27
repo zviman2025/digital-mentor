@@ -82,3 +82,28 @@ function botReply() {
   const randomIndex = Math.floor(Math.random() * responses.length);
   addMessage(responses[randomIndex], 'bot');
 }
+
+function editProfile() {
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('editProfile').classList.remove('hidden');
+
+  // טעינת נתונים קיימים אם יש
+  document.getElementById('editName').value = localStorage.getItem('name') || '';
+  document.getElementById('editGender').value = localStorage.getItem('gender') || 'בחר מגדר';
+  document.getElementById('editExperience').value = localStorage.getItem('experience') || '';
+  document.getElementById('editRole').value = localStorage.getItem('role') || 'בחר תפקיד';
+  document.getElementById('editFramework').value = localStorage.getItem('framework') || 'בחר מסגרת';
+}
+
+function saveProfile() {
+  // שמירת הפרטים
+  localStorage.setItem('name', document.getElementById('editName').value);
+  localStorage.setItem('gender', document.getElementById('editGender').value);
+  localStorage.setItem('experience', document.getElementById('editExperience').value);
+  localStorage.setItem('role', document.getElementById('editRole').value);
+  localStorage.setItem('framework', document.getElementById('editFramework').value);
+
+  // חזרה לצ'אט
+  document.getElementById('editProfile').classList.add('hidden');
+  document.getElementById('chat').classList.remove('hidden');
+}
