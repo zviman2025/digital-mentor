@@ -36,7 +36,7 @@ function sendMessage() {
 function addMessage(text, sender) {
   const chat = document.getElementById('chatMessages');
   const div = document.createElement('div');
-  div.className = sender === 'user' ? 'text-right p-2 bg-blue-100 rounded self-end max-w-xs' : 'text-right p-2 bg-green-100 rounded self-start max-w-xs animate-bounce';
+  div.className = sender === 'user' ? 'text-right p-2 bg-blue-100 rounded self-end max-w-xs' : 'text-right p-2 bg-green-100 rounded self-start max-w-xs';
   div.innerText = text;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -57,7 +57,24 @@ function toggleDarkMode() {
 }
 
 function editProfile() {
-  alert('כאן נוכל להוסיף אפשרות לערוך את הפרטים בהמשך.');
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('editProfile').classList.remove('hidden');
+  document.getElementById('editName').value = localStorage.getItem('name') || '';
+  document.getElementById('editGender').value = localStorage.getItem('gender') || 'בחר מגדר';
+  document.getElementById('editExperience').value = localStorage.getItem('experience') || '';
+  document.getElementById('editRole').value = localStorage.getItem('role') || 'בחר תפקיד';
+  document.getElementById('editFramework').value = localStorage.getItem('framework') || 'בחר מסגרת';
+}
+
+function saveProfile() {
+  localStorage.setItem('name', document.getElementById('editName').value);
+  localStorage.setItem('gender', document.getElementById('editGender').value);
+  localStorage.setItem('experience', document.getElementById('editExperience').value);
+  localStorage.setItem('role', document.getElementById('editRole').value);
+  localStorage.setItem('framework', document.getElementById('editFramework').value);
+
+  document.getElementById('editProfile').classList.add('hidden');
+  document.getElementById('chat').classList.remove('hidden');
 }
 
 function logout() {
