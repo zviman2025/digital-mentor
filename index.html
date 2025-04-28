@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -15,7 +14,7 @@
     @keyframes slideUp { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
 
 <!-- Splash Screen -->
 <div id="splash" class="flex flex-col items-center justify-center w-full h-screen bg-blue-500 text-white">
@@ -23,12 +22,22 @@
   <p class="text-lg">מלווה אותך בדרך</p>
 </div>
 
-<!-- Login/Register Screen -->
-<div id="auth" class="hidden flex-col items-center justify-center w-full p-4">
-  <h2 class="text-2xl font-bold mb-6">ברוכים הבאים</h2>
-  <form class="w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-4">
-    <input type="email" id="email" placeholder="אימייל" class="w-full p-2 border rounded" required>
-    <input type="password" id="password" placeholder="סיסמה" class="w-full p-2 border rounded" required>
+<!-- Auth Screen -->
+<div id="auth" class="hidden flex flex-col items-center justify-center flex-1 p-4">
+  <div class="flex mb-6 space-x-4 space-x-reverse">
+    <button id="loginTab" onclick="showLogin()" class="p-2 bg-blue-500 text-white rounded">התחברות</button>
+    <button id="registerTab" onclick="showRegister()" class="p-2 bg-gray-300 text-gray-800 rounded">הרשמה</button>
+  </div>
+
+  <form id="loginForm" class="w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="loginEmail" placeholder="אימייל" class="w-full p-2 border rounded">
+    <input type="password" id="loginPassword" placeholder="סיסמה" class="w-full p-2 border rounded">
+    <button type="button" onclick="goToChat()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">התחבר</button>
+  </form>
+
+  <form id="registerForm" class="hidden w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="email" placeholder="אימייל" class="w-full p-2 border rounded">
+    <input type="password" id="password" placeholder="סיסמה" class="w-full p-2 border rounded">
     <input type="text" id="name" placeholder="שם מלא" class="w-full p-2 border rounded">
     <select id="gender" class="w-full p-2 border rounded">
       <option>בחר מגדר</option>
@@ -49,7 +58,7 @@
       <option>חטיבה</option>
       <option>תיכון</option>
     </select>
-    <button type="button" onclick="goToChat()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">התחבר</button>
+    <button type="button" onclick="goToChat()" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">הרשם</button>
   </form>
 </div>
 
@@ -68,34 +77,6 @@
     <input id="messageInput" type="text" placeholder="כתוב הודעה..." class="flex-1 p-2 border rounded-l" onkeydown="if(event.key==='Enter') sendMessage()">
     <button onclick="sendMessage()" class="bg-blue-500 text-white p-2 rounded-r hover:bg-blue-600">שלח</button>
   </div>
-</div>
-
-<!-- Edit Profile Screen -->
-<div id="editProfile" class="hidden flex flex-col w-full h-screen p-4 bg-white">
-  <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">עריכת פרטים אישיים</h2>
-  <form class="flex flex-col space-y-4 max-w-md mx-auto">
-    <input id="editName" type="text" placeholder="שם מלא" class="p-2 border rounded">
-    <select id="editGender" class="p-2 border rounded">
-      <option>בחר מגדר</option>
-      <option>זכר</option>
-      <option>נקבה</option>
-      <option>אחר</option>
-    </select>
-    <input id="editExperience" type="number" placeholder="שנות ותק" class="p-2 border rounded">
-    <select id="editRole" class="p-2 border rounded">
-      <option>בחר תפקיד</option>
-      <option>גננת</option>
-      <option>מורה</option>
-    </select>
-    <select id="editFramework" class="p-2 border rounded">
-      <option>בחר מסגרת</option>
-      <option>קדם יסודי</option>
-      <option>יסודי</option>
-      <option>חטיבה</option>
-      <option>תיכון</option>
-    </select>
-    <button type="button" onclick="saveProfile()" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">שמור וחזור</button>
-  </form>
 </div>
 
 <script src="script.js"></script>
