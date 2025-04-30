@@ -6,6 +6,18 @@ window.onload = () => {
   }, 2000);
 };
 
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAyMVQS79054VtrTDrktBhHh0Cg7og_8Ws",
+  authDomain: "mentor-b18c1.firebaseapp.com",
+  projectId: "mentor-b18c1",
+  storageBucket: "mentor-b18c1.firebasestorage.app",
+  messagingSenderId: "265273615384",
+  appId: "1:265273615384:web:bfc54051eeeed112e0cf6d",
+  measurementId: "G-C6SZPV2MTS"
+};
+firebase.initializeApp(firebaseConfig);
+
 function showLogin() {
   document.getElementById('loginForm').classList.remove('hidden');
   document.getElementById('registerForm').classList.add('hidden');
@@ -92,6 +104,37 @@ function saveProfile() {
 function logout() {
   document.getElementById('chat').classList.add('hidden');
   document.getElementById('auth').classList.remove('hidden');
+}
+
+// Authentication functions
+function registerUser() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      const user = userCredential.user;
+      console.log("User registered:", user);
+      goToChat();
+    })
+    .catch(error => {
+      console.error("Error registering user:", error.message);
+    });
+}
+
+function loginUser() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      const user = userCredential.user;
+      console.log("User logged in:", user);
+      goToChat();
+    })
+    .catch(error => {
+      console.error("Error logging in:", error.message);
+    });
 }
 
 function botReply(userText) {
