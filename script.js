@@ -21,11 +21,21 @@ firebase.initializeApp(firebaseConfig);
 function showLogin() {
   document.getElementById('loginForm').classList.remove('hidden');
   document.getElementById('registerForm').classList.add('hidden');
+  // Change button colors on mode change
+  document.getElementById('loginTab').classList.remove('bg-gray-800', 'text-white');
+  document.getElementById('loginTab').classList.add('bg-blue-500', 'text-white');
+  document.getElementById('registerTab').classList.remove('bg-blue-500', 'text-white');
+  document.getElementById('registerTab').classList.add('bg-gray-300', 'text-gray-800');
 }
 
 function showRegister() {
   document.getElementById('loginForm').classList.add('hidden');
   document.getElementById('registerForm').classList.remove('hidden');
+  // Change button colors on mode change
+  document.getElementById('loginTab').classList.remove('bg-blue-500', 'text-white');
+  document.getElementById('loginTab').classList.add('bg-gray-300', 'text-gray-800');
+  document.getElementById('registerTab').classList.remove('bg-gray-300', 'text-gray-800');
+  document.getElementById('registerTab').classList.add('bg-blue-500', 'text-white');
 }
 
 function goToChat() {
