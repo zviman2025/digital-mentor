@@ -18,6 +18,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// Login and registration show functions
 function showLogin() {
   document.getElementById('loginForm').classList.remove('hidden');
   document.getElementById('registerForm').classList.add('hidden');
@@ -45,6 +46,7 @@ function goToChat() {
   document.getElementById('chat').classList.remove('hidden');
 }
 
+// Send message and add reply functions
 function sendMessage() {
   const input = document.getElementById('messageInput');
   const text = input.value.trim();
@@ -116,7 +118,7 @@ function logout() {
   document.getElementById('auth').classList.remove('hidden');
 }
 
-// Authentication functions
+// Firebase Authentication functions
 function registerUser() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -129,6 +131,7 @@ function registerUser() {
     })
     .catch(error => {
       console.error("Error registering user:", error.message);
+      alert(error.message); // Alert for errors during registration
     });
 }
 
@@ -144,6 +147,7 @@ function loginUser() {
     })
     .catch(error => {
       console.error("Error logging in:", error.message);
+      alert(error.message); // Alert for errors during login
     });
 }
 
