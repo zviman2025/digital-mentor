@@ -54,6 +54,18 @@ function toggleDarkMode() {
     el.classList.toggle('text-white');
     el.classList.toggle('border-gray-600');
   });
+
+  const loginButton = document.getElementById('loginTab');
+  const registerButton = document.getElementById('registerTab');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  loginButton.classList.toggle('bg-blue-500');
+  loginButton.classList.toggle('bg-gray-800');
+  registerButton.classList.toggle('bg-gray-300');
+  registerButton.classList.toggle('bg-gray-800');
+  loginForm.classList.toggle('bg-white');
+  registerForm.classList.toggle('bg-white');
 }
 
 function editProfile() {
@@ -87,15 +99,15 @@ function botReply(userText) {
   let reply = '';
 
   if (userText.includes('עייף') || userText.includes('אין כוח') || userText.includes('קשה')) {
-    reply = `${name}, נשמע שאת/ה עובר/ת תקופה לא פשוטה. תזכור/י לקחת נשימה.`;
+    reply = `${name}, נשמע שאת/ה עובר/ת תקופה לא פשוטה. תזכור/י לקחת נשימה. חני פה לכל דבר.`;
   } else if (userText.includes('שמחה') || userText.includes('הצלחתי') || userText.includes('מרוצה')) {
-    reply = `וואו, ${name}! כל הכבוד! איזה כיף לשמוע! 🌟`;
+    reply = `וואו, ${name}! כל הכבוד! איזה כיף לשמוע! 🌟 זה כיף לדעת שאתה מרוצה מההתקדמות!`;
   } else if (userText.includes('עזרה') || userText.includes('איך') || userText.includes('מה עושים')) {
-    reply = `${name}, אני כאן להקשיב ולעזור. רוצה לספר קצת יותר?`;
+    reply = `${name}, אני כאן להקשיב ולעזור. רוצה לספר קצת יותר? אני כאן כדי לסייע לך!`;
   } else if (userText.includes('?')) {
-    reply = `שאלה מעולה, ${name}! אני איתך.`;
+    reply = `שאלה מעולה, ${name}! אני איתך לכל שאלה.`;
   } else {
-    reply = `תודה ששיתפת, ${name}. אני כאן בשבילך.`;
+    reply = `תודה ששיתפת, ${name}. אני כאן בשבילך תמיד.`;
   }
 
   addMessage(reply, 'bot');
