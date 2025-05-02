@@ -65,7 +65,18 @@ function addMessage(text, sender) {
   const div = document.createElement('div');
   const name = localStorage.getItem('name') || 'משתמש';
   const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
-  const cls = sender === 'user' ? 'text-right p-2 bg-blue-100 rounded self-end max-w-xs' : 'text-left p-2 bg-green-100 rounded self-start max-w-xs';
+  let cls = '';
+  if (sender === 'user') {
+    const isDark = document.body.classList.contains('bg-gray-900');
+    cls = isDark
+      ? 'text-right p-2 bg-blue-900 text-white rounded self-end max-w-xs'
+      : 'text-right p-2 bg-blue-100 text-gray-900 rounded self-end max-w-xs';
+  } else {
+    const isDark = document.body.classList.contains('bg-gray-900');
+    cls = isDark
+      ? 'text-left p-2 bg-green-900 text-white rounded self-start max-w-xs'
+      : 'text-left p-2 bg-green-100 text-gray-900 rounded self-start max-w-xs';
+  }
   div.className = cls;
   div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
   chat.appendChild(div);
