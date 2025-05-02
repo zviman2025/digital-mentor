@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   try {
     const hfResponse = await fetch(
-      'https://api-inference.huggingface.co/models/onlplab/alephbert-base',
+      'https://api-inference.huggingface.co/models/bigscience/bloom-560m',
       {
         method: 'POST',
         headers: {
