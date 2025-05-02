@@ -1,13 +1,12 @@
-// Force default light mode on initial load
-window.addEventListener('DOMContentLoaded', () => {
-  // Remove dark class and reset storage
-  document.documentElement.classList.remove('dark');
-  localStorage.setItem('theme', 'light');
-  const btn = document.getElementById('themeToggleBtn');
-  if (btn) btn.innerText = '🌙 מצב לילה';
-});
+// Reverted login/register to simple goToChat, Firebase auth commented out
+/*
+const firebaseConfig = { ... };
+firebase.initializeApp(firebaseConfig);
 
-// Splash and auth initialization
+function registerUser() { ... }
+function loginUser() { ... }
+*/
+
 window.onload = () => {
   setTimeout(() => {
     document.getElementById('splash').classList.add('hidden');
@@ -18,11 +17,21 @@ window.onload = () => {
 function showLogin() {
   document.getElementById('loginForm').classList.remove('hidden');
   document.getElementById('registerForm').classList.add('hidden');
+  updateAuthTabs();
 }
 
 function showRegister() {
   document.getElementById('loginForm').classList.add('hidden');
   document.getElementById('registerForm').classList.remove('hidden');
+  updateAuthTabs();
+}
+
+function updateAuthTabs() {
+  const dark = document.body.classList.contains('bg-gray-900');
+  const loginTab = document.getElementById('loginTab');
+  const registerTab = document.getElementById('registerTab');
+  loginTab.className = dark ? 'p-2 bg-gray-800 text-white rounded' : 'p-2 bg-blue-500 text-white rounded';
+  registerTab.className = dark ? 'p-2 bg-gray-800 text-white rounded' : 'p-2 bg-gray-300 text-gray-800 rounded';
 }
 
 function goToChat() {
@@ -37,16 +46,75 @@ function clearChat() {
 }
 
 function toggleDarkMode() {
-  const btn = document.getElementById('themeToggleBtn');
-  if (document.documentElement.classList.contains('dark')) {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-    btn.innerText = '🌙 מצב לילה';
-  } else {
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-    btn.innerText = '☀️ מצב יום';
-  }
+  document.body.classList.toggle('bg-gray-900');
+  document.body.classList.toggle('text-white');
+  ['splash','auth','chat','editProfile'].forEach(id => {
+    document.getElementById(id).classList.toggle('bg-white');
+    document.getElementById(id).classList.toggle('bg-gray-900');
+  });
+  document.querySelectorAll('div, input, select, button').forEach(el => {
+    el.classList.toggle('bg-gray-800');
+    el.classList.toggle('text-white');
+    el.classList.toggle('border-gray-600');
+  });
+  updateAuthTabs();
 }
 
-// Bot and other functions ...
+function addMessage(text, sender) {
+  const chat = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  const name = localStorage.getItem('name') || 'משתמש';
+  const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
+  const cls = sender === 'user' ? 'text-right p-2 bg-blue-100 rounded self-end max-w-xs' : 'text-left p-2 bg-green-100 rounded self-start max-w-xs';
+  div.className = cls;
+  div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById('messageInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage(text, 'user');
+  input.value = '';
+  setTimeout(() => botReply(text), 500);
+}
+
+function editProfile() {
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('editProfile').classList.remove('hidden');
+}
+
+function saveProfile() {
+  ['editName','editGender','editExperience','editRole','editFramework'].forEach(id => {
+    const el = document.getElementById(id);
+    localStorage.setItem(id.replace('edit','').toLowerCase(), el.value);
+  });
+  document.getElementById('editProfile').classList.add('hidden');
+  document.getElementById('chat').classList.remove('hidden');
+}
+
+function logout() {
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('auth').classList.remove('hidden');
+}
+
+function botReply(userText) {
+  const name = localStorage.getItem('name') || 'משתמש';
+  let reply = '';
+  if (/\b(עייף|קשה|אין כוח)\b/.test(userText)) {
+    reply = `נשמע קשה, ${name}. האם ניסית עולם ורגיעה קצרה?`;
+  } else if (/\b(שמחה|הצלחתי|מרוצה)\b/.test(userText)) {
+    reply = `נהדר! שמח לשמוע, ${name}. מה היה הגורם הגדול להצלחה הזו?`;
+  } else if (/\b(עצה|טיפ|עזרה)\b/.test(userText)) {
+    reply = `אשמח לעזור, ${name}. על מה תרצה להתמקד היום?`;
+  } else if (/\b(איך|מה)\b/.test(userText)) {
+    reply = `שאלה חשובה, ${name}. תן לי עוד קצת פרטים ואנסה לכוון אותך.`;
+  } else if (/\b(תודה)\b/.test(userText)) {
+    reply = `בכיף, ${name}. תמיד כאן לתמוך בך.`;
+  } else {
+    reply = `מעניין, ${name}. תוכל לפרט יותר כדי שאוכל לסייע?`;
+  }
+  addMessage(reply, 'bot');
+}

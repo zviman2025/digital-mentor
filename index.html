@@ -4,108 +4,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>חונך דיגיטלי</title>
-  <!-- Enable Tailwind dark mode -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    }
-  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Assistant&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Assistant', sans-serif; }
   </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col">
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
 
 <!-- Splash Screen -->
-<div id="splash" class="flex flex-col items-center justify-center w-full h-screen bg-blue-500 dark:bg-blue-800 text-white dark:text-gray-200">
+<div id="splash" class="flex flex-col items-center justify-center w-full h-screen bg-blue-500 text-white">
   <h1 class="text-4xl font-bold mb-4 animate-pulse">חונך דיגיטלי</h1>
   <p class="text-lg">מלווה אותך בדרך</p>
 </div>
 
 <!-- Auth Screen -->
-<div id="auth" class="hidden flex flex-col items-center justify-center flex-1 p-4 bg-white dark:bg-gray-800">
+<div id="auth" class="hidden flex flex-col items-center justify-center flex-1 p-4">
   <div class="flex mb-6 space-x-4 space-x-reverse">
-    <button id="loginTab" onclick="showLogin()" class="p-2 bg-blue-500 dark:bg-blue-700 text-white dark:text-gray-100 rounded">התחברות</button>
-    <button id="registerTab" onclick="showRegister()" class="p-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded">הרשמה</button>
+    <button id="loginTab" onclick="showLogin()" class="p-2 bg-blue-500 text-white rounded">התחברות</button>
+    <button id="registerTab" onclick="showRegister()" class="p-2 bg-gray-300 text-gray-800 rounded">הרשמה</button>
   </div>
 
-  <form id="loginForm" class="w-full max-w-sm bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md space-y-4">
-    <input type="email" id="loginEmail" placeholder="אימייל" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <input type="password" id="loginPassword" placeholder="סיסמה" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <button type="button" onclick="goToChat()" class="w-full bg-blue-500 dark:bg-blue-700 text-white dark:text-gray-100 p-2 rounded hover:bg-blue-600 dark:hover:bg-blue-800">התחבר</button>
+  <form id="loginForm" class="w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="loginEmail" placeholder="אימייל" class="w-full p-2 border rounded">
+    <input type="password" id="loginPassword" placeholder="סיסמה" class="w-full p-2 border rounded">
+    <button type="button" onclick="goToChat()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">התחבר</button>
   </form>
 
-  <form id="registerForm" class="hidden w-full max-w-sm bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md space-y-4">
-    <input type="email" id="email" placeholder="אימייל" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <input type="password" id="password" placeholder="סיסמה" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <input type="text" id="name" placeholder="שם מלא" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <select id="gender" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+  <form id="registerForm" class="hidden w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="email" placeholder="אימייל" class="w-full p-2 border rounded">
+    <input type="password" id="password" placeholder="סיסמה" class="w-full p-2 border rounded">
+    <input type="text" id="name" placeholder="שם מלא" class="w-full p-2 border rounded">
+    <select id="gender" class="w-full p-2 border rounded">
       <option>בחר מגדר</option>
       <option>זכר</option>
       <option>נקבה</option>
       <option>אחר</option>
     </select>
-    <input type="number" id="experience" placeholder="שנות ותק" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <select id="role" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+    <input type="number" id="experience" placeholder="שנות ותק" class="w-full p-2 border rounded">
+    <select id="role" class="w-full p-2 border rounded">
       <option>בחר תפקיד</option>
       <option>גננת</option>
       <option>מורה</option>
     </select>
-    <select id="framework" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+    <select id="framework" class="w-full p-2 border rounded">
       <option>בחר מסגרת</option>
       <option>קדם יסודי</option>
       <option>יסודי</option>
       <option>חטיבה</option>
       <option>תיכון</option>
     </select>
-    <button type="button" onclick="goToChat()" class="w-full bg-green-500 dark:bg-green-700 text-white dark:text-gray-100 p-2 rounded hover:bg-green-600 dark:hover:bg-green-800">הרשם</button>
+    <button type="button" onclick="goToChat()" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">הרשם</button>
   </form>
 </div>
 
 <!-- Chat Screen -->
-<div id="chat" class="hidden flex flex-col w-full h-screen p-4 bg-white dark:bg-gray-800">
+<div id="chat" class="hidden flex flex-col w-full h-screen p-4 bg-white">
   <div class="flex justify-between items-center mb-4">
     <div class="space-x-2 space-x-reverse">
-      <button onclick="clearChat()" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500">🧹 ניקוי צ'אט</button>
-      <button id="themeToggleBtn" onclick="toggleDarkMode()" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500">🌙 מצב לילה</button>
-      <button onclick="editProfile()" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500">✏️ עריכת פרטים</button>
+      <button onclick="clearChat()" class="bg-gray-200 p-2 rounded hover:bg-gray-300">🧹 ניקוי צ'אט</button>
+      <button onclick="toggleDarkMode()" class="bg-gray-200 p-2 rounded hover:bg-gray-300">🌙 מצב לילה</button>
+      <button onclick="editProfile()" class="bg-gray-200 p-2 rounded hover:bg-gray-300">✏️ עריכת פרטים</button>
     </div>
-    <button onclick="logout()" class="bg-red-400 dark:bg-red-600 text-white p-2 rounded hover:bg-red-500 dark:hover:bg-red-700">🚪 יציאה</button>
+    <button onclick="logout()" class="bg-red-400 text-white p-2 rounded hover:bg-red-500">🚪 יציאה</button>
   </div>
-  <div id="chatMessages" class="flex-1 overflow-y-auto space-y-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700"></div>
+  <div id="chatMessages" class="flex-1 overflow-y-auto space-y-2 p-2 border rounded bg-gray-50"></div>
   <div class="flex mt-4">
-    <input id="messageInput" type="text" placeholder="כתוב הודעה..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" onkeydown="if(event.key==='Enter') sendMessage()">
-    <button onclick="sendMessage()" class="bg-blue-500 dark:bg-blue-700 text-white dark:text-gray-100 p-2 rounded-r hover:bg-blue-600 dark:hover:bg-blue-800">שלח</button>
+    <input id="messageInput" type="text" placeholder="כתוב הודעה..." class="flex-1 p-2 border rounded-l" onkeydown="if(event.key==='Enter') sendMessage()">
+    <button onclick="sendMessage()" class="bg-blue-500 text-white p-2 rounded-r hover:bg-blue-600">שלח</button>
   </div>
 </div>
 
 <!-- Edit Profile Screen -->
-<div id="editProfile" class="hidden flex flex-col w-full h-screen p-4 bg-white dark:bg-gray-800">
-  <h2 class="text-2xl font-bold mb-6 text-center text-blue-600 dark:text-blue-400">עריכת פרטים אישיים</h2>
+<div id="editProfile" class="hidden flex flex-col w-full h-screen p-4 bg-white">
+  <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">עריכת פרטים אישיים</h2>
   <form class="flex flex-col space-y-4 max-w-md mx-auto">
-    <input id="editName" type="text" placeholder="עדכן שם" class="p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <select id="editGender" class="p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+    <input id="editName" type="text" placeholder="עדכן שם" class="p-2 border rounded">
+    <select id="editGender" class="p-2 border rounded">
       <option>בחר מגדר</option>
       <option>זכר</option>
       <option>נקבה</option>
       <option>אחר</option>
     </select>
-    <input id="editExperience" type="number" placeholder="עדכן שנות ותק" class="p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-    <select id="editRole" class="p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+    <input id="editExperience" type="number" placeholder="עדכן שנות ותק" class="p-2 border rounded">
+    <select id="editRole" class="p-2 border rounded">
       <option>בחר תפקיד</option>
       <option>גננת</option>
       <option>מורה</option>
     </select>
-    <select id="editFramework" class="p-2 border border_GRAY-300 dark:border_GRAY-600 rounded bg-white dark:bg_GRAY-700 text_GRAY-900 dark:text_GRAY-100">
+    <select id="editFramework" class="p-2 border rounded">
       <option>בחר מסגרת</option>
       <option>קדם יסודי</option>
       <option>יסודי</option>
       <option>חטיבה</option>
       <option>תיכון</option>
     </select>
-    <button type="button" onclick="saveProfile()" class="bg-green-500 dark:bg-green-700 text-white dark:text-gray-100 p-2 rounded hover:bg-green-600 dark:hover:bg-green-800">שמור וחזור</button>
+    <button type="button" onclick="saveProfile()" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">שמור וחזור</button>
   </form>
 </div>
 
