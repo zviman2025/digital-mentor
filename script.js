@@ -67,8 +67,14 @@ function addMessage(text, sender) {
   const div = document.createElement('div');
   const name = localStorage.getItem('name') || 'משתמש';
   const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
-  const cls = sender === 'user' ? 'text-right p-2 rounded self-end max-w-xs' : 'text-left p-2 rounded self-start max-w-xs';
+  // Align both user and bot appropriately, bot text right-to-left
+  const cls = sender === 'user'
+    ? 'text-right p-2 rounded self-end max-w-xs'
+    : 'text-right p-2 rounded self-start max-w-xs';
   div.className = cls;
+  if (sender === 'bot') {
+    div.style.direction = 'rtl';
+  }
   div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -102,31 +108,32 @@ function logout() {
   document.getElementById('auth').classList.remove('hidden');
 }
 
-function botReply(userText) {
-  const name = localStorage.getItem('name') || 'משתמש';
-  const patterns = [
-    {regex: /(?<!\p{L})(עייף|קשה|אין כוח)(?!\p{L})/u, reply: `נשמע קשה, ${name}. האם ניסית להירגע מעט או לקחת הפסקה קצרה?`},
-    {regex: /(?<!\p{L})(שמחה|הצלחתי|מרוצה)(?!\p{L})/u, reply: `כל הכבוד, ${name}! מה לדעתך גרם להצלחה הזו?`},
-    {regex: /(?<!\p{L})(עצוב|מדוכא|כואב)(?!\p{L})/u, reply: `אני מצטער לשמוע, ${name}. רוצה לשתף יותר במה קורה?`},
-    {regex: /(?<!\p{L})(לחץ|מתוח|לחוצה)(?!\p{L})/u, reply: `הלחץ יכול להיות קשה. האם יש משהו מסוים שמייצר לך תחושת סטרס עכשיו?`},
-    {regex: /(?<!\p{L})(עצה|טיפ|עזרה)(?!\p{L})/u, reply: `בשמחה, ${name}. באיזה תחום היית רוצה לקבל תמיכה היום?`},
-    {regex: /(?<!\p{L})(איך|מה)(?!\p{L})/u, reply: `שאלה מעניינת, ${name}. תוכל לפרט קצת יותר כדי שאוכל לכוון אותך?`},
-    {regex: /(?<!\p{L})(תודה|תודה רבה)(?!\p{L})/u, reply: `בשמחה, ${name}! תמיד כאן כשאתה צריך.`},
-    {regex: /(?<!\p{L})(שלום|היי|הלו)(?!\p{L})/u, reply: `שלום, ${name}! כיצד אפשר לעזור היום?`},
-    {regex: /(?<!\p{L})(להיות|להרגיש)(?!\p{L})/u, reply: `רגשות הם חלק חשוב. רוצה לספר לי איך אתה מרגיש בפרט?`},
-    {regex: /(?<!\p{L})(ילדים|בנים|בנות)(?!\p{L})/u, reply: `ילדים יכולים להיות מאתגר... איך הולך עם הילדים שלך?`},
-    {regex: /(?<!\p{L})(עבודה|קריירה)(?!\p{L})/u, reply: `איך הולך בעבודה? האם יש משהו שברצונך לשפר או לשתף?`},
-    {regex: /(?<!\p{L})(בריאות|בריא)(?!\p{L})/u, reply: `הבריאות חשובה. האם יש משהו ספציפי שמטריד אותך בנושא הבריאות?`},
-    {regex: /(?<!\p{L})(גירושין|גירשנו)(?!\p{L})/u, reply: `גירושין הם תהליך מורכב. האם תרצה לדבר על ההיבטים הרגשיים או הפרקטיים?`},
-    {regex: /(?<!\p{L})(סטנדאפ|בדיחה)(?!\p{L})/u, reply: `אה, סטנדאפ! רוצה עזרה בפיתוח קטע חדש או מעטפת לקטע קיים?`},
-    {regex: /(?<!\p{L})(נסיעה|טיול)(?!\p{L})/u, reply: `טיולים תמיד מרתקים. לאן אתה מתכנן לנסוע?`}
-  ];
-  let reply = `מעניין, ${name}. תוכל לפרט יותר כדי שאוכל לסייע?`;
-  for (const p of patterns) {
-    if (p.regex.test(userText)) {
-      reply = p.reply;
-      break;
+async function botReply(userText) {
+  addMessage('...טוען תגובה...', 'bot');
+  try {
+    const response = await fetch('https://api.cohere.ai/v2/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer nUEmCkwkSlYkNwWinzqErl6qd9z3PFTFBJShCzXN'
+      },
+      body: JSON.stringify({
+        model: 'command-xlarge',
+        messages: [
+          { role: 'user', content: userText }
+        ],
+        max_tokens: 100,
+        temperature: 0.8
+      })
+    });
+    if (!response.ok) {
+      throw new Error(`Status ${response.status}`);
     }
+    const data = await response.json();
+    const text = data.message.content[0].text;
+    addMessage(text, 'bot');
+  } catch (err) {
+    console.error(err);
+    addMessage('מצטערת, הייתה שגיאה בקבלת התשובה.', 'bot');
   }
-  addMessage(reply, 'bot');
 }
