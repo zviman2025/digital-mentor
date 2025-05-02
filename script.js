@@ -102,27 +102,25 @@ function logout() {
   document.getElementById('auth').classList.remove('hidden');
 }
 
-// Replaced botReply to use Cohere API directly
 async function botReply(userText) {
-  const name = localStorage.getItem('name') || 'משתמש';
   addMessage('...טוען תגובה...', 'bot');
   try {
-    const response = await fetch('https://api.cohere.com/v1/generate', {
+    const response = await fetch('https://api.cohere.ai/v2/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer nUEmCkwkSlYkNwWinzqErl6qd9z3PFTFBJShCzXN'
       },
       body: JSON.stringify({
-        model: 'xlarge',
-        prompt: userText,
+        model: 'command-xlarge',
+        messages: [{ role: 'user', content: userText }],
         max_tokens: 100,
         temperature: 0.8
       })
     });
-    if (!response.ok) { throw new Error(`Status ${response.status}`); }
+    if (!response.ok) throw new Error(`Status ${response.status}`);
     const data = await response.json();
-    const text = data.generations[0].text.trim();
+    const text = data.message.content[0].text;
     addMessage(text, 'bot');
   } catch (err) {
     console.error(err);
