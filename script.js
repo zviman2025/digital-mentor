@@ -27,11 +27,7 @@ function showRegister() {
 }
 
 function updateAuthTabs() {
-  const dark = document.body.classList.contains('bg-gray-900');
-  const loginTab = document.getElementById('loginTab');
-  const registerTab = document.getElementById('registerTab');
-  loginTab.className = dark ? 'p-2 bg-gray-800 text-white rounded' : 'p-2 bg-blue-500 text-white rounded';
-  registerTab.className = dark ? 'p-2 bg-gray-800 text-white rounded' : 'p-2 bg-gray-300 text-gray-800 rounded';
+  // Optional: Implement active tab styling if needed
 }
 
 function goToChat() {
@@ -46,18 +42,7 @@ function clearChat() {
 }
 
 function toggleDarkMode() {
-  document.body.classList.toggle('bg-gray-900');
-  document.body.classList.toggle('text-white');
-  ['splash','auth','chat','editProfile'].forEach(id => {
-    document.getElementById(id).classList.toggle('bg-white');
-    document.getElementById(id).classList.toggle('bg-gray-900');
-  });
-  document.querySelectorAll('div, input, select, button').forEach(el => {
-    el.classList.toggle('bg-gray-800');
-    el.classList.toggle('text-white');
-    el.classList.toggle('border-gray-600');
-  });
-  updateAuthTabs();
+  document.documentElement.classList.toggle('dark');
 }
 
 function addMessage(text, sender) {
@@ -65,7 +50,9 @@ function addMessage(text, sender) {
   const div = document.createElement('div');
   const name = localStorage.getItem('name') || 'משתמש';
   const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
-  const cls = sender === 'user' ? 'text-right p-2 bg-blue-100 rounded self-end max-w-xs' : 'text-left p-2 bg-green-100 rounded self-start max-w-xs';
+  const cls = sender === 'user'
+    ? 'text-right p-2 bg-blue-100 dark:bg-blue-900 rounded self-end max-w-xs'
+    : 'text-left p-2 bg-green-100 dark:bg-green-900 rounded self-start max-w-xs';
   div.className = cls;
   div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
   chat.appendChild(div);
