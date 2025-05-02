@@ -67,14 +67,8 @@ function addMessage(text, sender) {
   const div = document.createElement('div');
   const name = localStorage.getItem('name') || 'משתמש';
   const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
-  // Align both user and bot appropriately, bot text right-to-left
-  const cls = sender === 'user'
-    ? 'text-right p-2 rounded self-end max-w-xs'
-    : 'text-right p-2 rounded self-start max-w-xs';
+  const cls = sender === 'user' ? 'text-right p-2 rounded self-end max-w-xs' : 'text-left p-2 rounded self-start max-w-xs';
   div.className = cls;
-  if (sender === 'bot') {
-    div.style.direction = 'rtl';
-  }
   div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -111,26 +105,20 @@ function logout() {
 async function botReply(userText) {
   addMessage('...טוען תגובה...', 'bot');
   try {
-    const response = await fetch('https://api.cohere.ai/v2/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer nUEmCkwkSlYkNwWinzqErl6qd9z3PFTFBJShCzXN'
-      },
-      body: JSON.stringify({
-        model: 'command-xlarge',
-        messages: [
-          { role: 'user', content: userText }
-        ],
-        max_tokens: 100,
-        temperature: 0.8
-      })
-    });
-    if (!response.ok) {
-      throw new Error(`Status ${response.status}`);
-    }
+    const response = await fetch(
+      'https://api-inference.huggingface.co/models/onlplab/alephbert-base',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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'
+        },
+        body: JSON.stringify({ inputs: userText })
+      }
+    );
+    if (!response.ok) throw new Error(`Status ${response.status}`);
     const data = await response.json();
-    const text = data.message.content[0].text;
+    const text = data.generated_text || (Array.isArray(data) && data[0].generated_text) || '';
     addMessage(text, 'bot');
   } catch (err) {
     console.error(err);
