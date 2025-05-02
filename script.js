@@ -1,12 +1,12 @@
-// Reverted login/register to simple goToChat, Firebase auth commented out
-/*
-const firebaseConfig = { ... };
-firebase.initializeApp(firebaseConfig);
+// Theme initialization: default to light mode unless user preference is dark
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.classList.add('dark');
+  document.getElementById && document.getElementById('themeToggleBtn') && (document.getElementById('themeToggleBtn').innerText = '☀️ מצב יום');
+} else {
+  document.documentElement.classList.remove('dark');
+}
 
-function registerUser() { ... }
-function loginUser() { ... }
-*/
-
+// Splash and auth initialization
 window.onload = () => {
   setTimeout(() => {
     document.getElementById('splash').classList.add('hidden');
@@ -17,17 +17,11 @@ window.onload = () => {
 function showLogin() {
   document.getElementById('loginForm').classList.remove('hidden');
   document.getElementById('registerForm').classList.add('hidden');
-  updateAuthTabs();
 }
 
 function showRegister() {
   document.getElementById('loginForm').classList.add('hidden');
   document.getElementById('registerForm').classList.remove('hidden');
-  updateAuthTabs();
-}
-
-function updateAuthTabs() {
-  // Optional: Implement active tab styling if needed
 }
 
 function goToChat() {
@@ -42,7 +36,16 @@ function clearChat() {
 }
 
 function toggleDarkMode() {
-  document.documentElement.classList.toggle('dark');
+  const btn = document.getElementById('themeToggleBtn');
+  if (document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+    btn.innerText = '🌙 מצב לילה';
+  } else {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+    btn.innerText = '☀️ מצב יום';
+  }
 }
 
 function addMessage(text, sender) {
