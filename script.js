@@ -1,3 +1,4 @@
+
 // Reverted login/register to simple goToChat, Firebase auth commented out
 /*
 const firebaseConfig = { ... };
@@ -104,6 +105,8 @@ function logout() {
 
 function botReply(userText) {
   const name = localStorage.getItem('name') || 'משתמש';
+
+  // Patterns for specific topics
   const patterns = [
     {regex: /(?<!\p{L})(עייף|קשה|אין כוח)(?!\p{L})/u, reply: `נשמע קשה, ${name}. האם ניסית להירגע מעט או לקחת הפסקה קצרה?`},
     {regex: /(?<!\p{L})(שמחה|הצלחתי|מרוצה)(?!\p{L})/u, reply: `כל הכבוד, ${name}! מה לדעתך גרם להצלחה הזו?`},
@@ -119,9 +122,23 @@ function botReply(userText) {
     {regex: /(?<!\p{L})(בריאות|בריא)(?!\p{L})/u, reply: `הבריאות חשובה. האם יש משהו ספציפי שמטריד אותך בנושא הבריאות?`},
     {regex: /(?<!\p{L})(גירושין|גירשנו)(?!\p{L})/u, reply: `גירושין הם תהליך מורכב. האם תרצה לדבר על ההיבטים הרגשיים או הפרקטיים?`},
     {regex: /(?<!\p{L})(סטנדאפ|בדיחה)(?!\p{L})/u, reply: `אה, סטנדאפ! רוצה עזרה בפיתוח קטע חדש או מעטפת לקטע קיים?`},
-    {regex: /(?<!\p{L})(נסיעה|טיול)(?!\p{L})/u, reply: `טיולים תמיד מרתקים. לאן אתה מתכנן לנסוע?`}
+    {regex: /(?<!\p{L})(נסיעה|טיול)(?!\p{L})/u, reply: `טיולים תמיד מרתקים. לאן אתה מתכנן לנסוע?`},
+    // New patterns
+    {regex: /(?<!\p{L})(כסף|משכנתא|הוצאות)(?!\p{L})/u, reply: `כסף יכול להיות נושא מורכב, ${name}. באילו היבטים היית רוצה להתמקד?`},
+    {regex: /(?<!\p{L})(בדידות|בודד|בבדידות)(?!\p{L})/u, reply: `לעיתים תחושת בדידות חזקה. ${name}, האם יש מישהו שאתה חש בטוח לשתף אותו?`},
+    {regex: /(?<!\p{L})(שינה|ישנוני)(?!\p{L})/u, reply: `שינה חשובה מאוד, ${name}. האם אתה מצליח לישון מספיק בלילה?`},
+    {regex: /(?<!\p{L})(הצלחה|מוצלח|גאה)(?!\p{L})/u, reply: `איזה יופי לשמוע על ההצלחה שלך, ${name}! איך הרגשת כשזה קרה?`}
   ];
-  let reply = `מעניין, ${name}. תוכל לפרט יותר כדי שאוכל לסייע?`;
+
+  // Randomized fallback replies
+  const defaultReplies = [
+    `מעניין, ${name}. תוכל לפרט יותר כדי שאוכל לסייע?`,
+    `גם אותי זה מעניין, ${name}! תוכל להסביר קצת יותר?`,
+    `אשמח לשמוע עוד על זה, ${name}. הפרט בבקשה.`,
+    `מה דעתך להרחיב קצת על זה, ${name}?`
+  ];
+
+  let reply = defaultReplies[Math.floor(Math.random() * defaultReplies.length)];
   for (const p of patterns) {
     if (p.regex.test(userText)) {
       reply = p.reply;
