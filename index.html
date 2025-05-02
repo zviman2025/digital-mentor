@@ -14,28 +14,84 @@
       --button-bg: #e5e7eb; --button-text: #1f2937;
     }
     body {
-      background-color: var(--bg);
-      color: var(--text);
       font-family: 'Assistant', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: var(--bg) !important;
+      color: var(--text) !important;
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    /* ... שאר העיצובים ... */
+    #auth, #chat, #editProfile {
+      background-color: var(--panel-bg) !important;
+      color: var(--panel-text) !important;
+    }
+    input, select {
+      background-color: var(--input-bg) !important;
+      color: var(--input-text) !important;
+      border: 1px solid var(--border) !important;
+    }
+    button {
+      background-color: var(--button-bg) !important;
+      color: var(--button-text) !important;
+    }
+    body.dark-mode {
+      --bg: #1f2937; --text: #f9fafb;
+      --panel-bg: #374151; --panel-text: #f9fafb;
+      --input-bg: #4b5563; --input-text: #f9fafb; --border: #6b7280;
+      --button-bg: #6b7280; --button-text: #f9fafb;
+    }
   </style>
 </head>
 <body>
-<div id="splash" class="flex flex-col items-center justify-center w-full h-screen bg-white">
-  <h1 class="text-3xl font-bold">ברוכים הבאים לחונך הדיגיטלי</h1>
+
+<!-- Splash Screen -->
+<div id="splash" class="flex flex-col items-center justify-center w-full h-screen bg-blue-500 text-white">
+  <h1 class="text-4xl font-bold mb-4 animate-pulse">חונך דיגיטלי</h1>
+  <p class="text-lg">מלווה אותך בדרך</p>
 </div>
 
-<div id="auth" class="hidden flex flex-col items-center w-full h-screen p-4">
-  <h2 class="mb-4 text-xl">הכנס/הרשם</h2>
-  <button onclick="goToChat()" class="p-2 rounded hover:opacity-80">המשך כמבקר</button>
+<!-- Auth Screen -->
+<div id="auth" class="hidden flex flex-col items-center justify-center flex-1 p-4">
+  <div class="flex mb-6 space-x-4 space-x-reverse">
+    <button id="loginTab" onclick="showLogin()" class="p-2 rounded">התחברות</button>
+    <button id="registerTab" onclick="showRegister()" class="p-2 rounded">הרשמה</button>
+  </div>
+
+  <form id="loginForm" class="w-full max-w-sm p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="loginEmail" placeholder="אימייל" class="w-full p-2 rounded">
+    <input type="password" id="loginPassword" placeholder="סיסמה" class="w-full p-2 rounded">
+    <button type="button" onclick="goToChat()" class="w-full p-2 rounded hover:opacity-80">התחבר</button>
+  </form>
+
+  <form id="registerForm" class="hidden w-full max-w-sm p-6 rounded-lg shadow-md space-y-4">
+    <input type="email" id="email" placeholder="אימייל" class="w-full p-2 rounded">
+    <input type="password" id="password" placeholder="סיסמה" class="w-full p-2 rounded">
+    <input type="text" id="name" placeholder="שם מלא" class="w-full p-2 rounded">
+    <select id="gender" class="w-full p-2 rounded">
+      <option>בחר מגדר</option>
+      <option>זכר</option>
+      <option>נקבה</option>
+      <option>אחר</option>
+    </select>
+    <input type="number" id="experience" placeholder="שנות ותק" class="w-full p-2 rounded">
+    <select id="role" class="w-full p-2 rounded">
+      <option>בחר תפקיד</option>
+      <option>גננת</option>
+      <option>מורה</option>
+    </select>
+    <select id="framework" class="w-full p-2 rounded">
+      <option>בחר מסגרת</option>
+      <option>קדם יסודי</option>
+      <option>יסודי</option>
+      <option>חטיבה</option>
+      <option>תיכון</option>
+    </select>
+    <button type="button" onclick="goToChat()" class="w-full p-2 rounded hover:opacity-80">הרשם</button>
+  </form>
 </div>
 
+<!-- Chat Screen -->
 <div id="chat" class="hidden flex flex-col w-full h-screen p-4">
   <div class="flex justify-between items-center mb-4">
     <div class="space-x-2 space-x-reverse">
@@ -43,32 +99,40 @@
       <button onclick="toggleDarkMode()" class="p-2 rounded hover:opacity-80">🌙 מצב לילה/יום</button>
       <button onclick="editProfile()" class="p-2 rounded hover:opacity-80">✏️ עריכת פרטים</button>
     </div>
+    <button onclick="logout()" class="p-2 rounded hover:opacity-80">🚪 יציאה</button>
   </div>
-  <div id="chatBox" class="flex-1 overflow-y-auto mb-4"></div>
-  <div class="flex">
-    <input id="userInput" type="text" class="flex-1 p-2 rounded-l border border-gray-300" placeholder="הקלד הודעה..." />
-    <button onclick="sendMessage()" class="p-2 rounded-r border border-gray-300">שלח</button>
+  <div id="chatMessages" class="flex-1 overflow-y-auto space-y-2 p-2 rounded"></div>
+  <div class="flex mt-4">
+    <input id="messageInput" type="text" placeholder="כתוב הודעה..." class="flex-1 p-2 rounded-l" onkeydown="if(event.key==='Enter') sendMessage()">
+    <button onclick="sendMessage()" class="p-2 rounded-r hover:opacity-80">שלח</button>
   </div>
 </div>
 
+<!-- Edit Profile Screen -->
 <div id="editProfile" class="hidden flex flex-col w-full h-screen p-4">
-  <h2 class="mb-4 text-xl">עריכת פרטים</h2>
-  <form onsubmit="event.preventDefault(); saveProfile();">
-    <input id="name" type="text" placeholder="השם שלך" class="p-2 rounded border border-gray-300 mb-2" />
-    <select id="ageGroup" class="p-2 rounded border border-gray-300 mb-2">
-      <option>בחר גיל</option>
-      <option>ילד</option>
-      <option>נוער</option>
-      <option>מבוגר</option>
+  <h2 class="text-2xl font-bold mb-6 text-center">עריכת פרטים אישיים</h2>
+  <form class="flex flex-col space-y-4 max-w-md mx-auto">
+    <input id="editName" type="text" placeholder="עדכן שם" class="p-2 rounded">
+    <select id="editGender" class="p-2 rounded">
+      <option>בחר מגדר</option>
+      <option>זכר</option>
+      <option>נקבה</option>
+      <option>אחר</option>
     </select>
-    <select id="editFramework" class="p-2 rounded mb-2">
+    <input id="editExperience" type="number" placeholder="עדכן שנות ותק" class="p-2 rounded">
+    <select id="editRole" class="p-2 rounded">
+      <option>בחר תפקיד</option>
+      <option>גננת</option>
+      <option>מורה</option>
+    </select>
+    <select id="editFramework" class="p-2 rounded">
       <option>בחר מסגרת</option>
       <option>קדם יסודי</option>
       <option>יסודי</option>
       <option>חטיבה</option>
       <option>תיכון</option>
     </select>
-    <button type="submit" class="p-2 rounded hover:opacity-80">שמור וחזור</button>
+    <button type="button" onclick="saveProfile()" class="p-2 rounded hover:opacity-80">שמור וחזור</button>
   </form>
 </div>
 
