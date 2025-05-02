@@ -107,7 +107,7 @@ async function botReply(userText) {
   const name = localStorage.getItem('name') || 'משתמש';
   addMessage('...טוען תגובה...', 'bot');
   try {
-    const response = await fetch('https://api.cohere.ai/v1/generate', {
+    const response = await fetch('https://api.cohere.com/v1/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
