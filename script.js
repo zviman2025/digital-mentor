@@ -1,15 +1,13 @@
-// Reverted login/register to simple goToChat, Firebase auth commented out
+// Firebase auth placeholder
 /*
 const firebaseConfig = { ... };
 firebase.initializeApp(firebaseConfig);
 */
 
 window.onload = () => {
-  // Apply theme from localStorage
   if (localStorage.getItem('dark') === 'true') {
     document.body.classList.add('dark-mode');
   }
-  // Splash screen timeout
   setTimeout(() => {
     document.getElementById('splash').classList.add('hidden');
     document.getElementById('auth').classList.remove('hidden');
@@ -67,8 +65,7 @@ function addMessage(text, sender) {
   const div = document.createElement('div');
   const name = localStorage.getItem('name') || 'משתמש';
   const speaker = sender === 'user' ? name : 'חונך הדיגיטלי';
-  const cls = sender === 'user' ? 'text-right p-2 rounded self-end max-w-xs' : 'text-left p-2 rounded self-start max-w-xs';
-  div.className = cls;
+  div.className = sender === 'user' ? 'text-right p-2 rounded self-end max-w-xs' : 'text-left p-2 rounded self-start max-w-xs';
   div.innerHTML = `<span class="font-bold">${speaker}:</span> ${text}`;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -105,21 +102,35 @@ function logout() {
 function botReply(userText) {
   const name = localStorage.getItem('name') || 'משתמש';
   const patterns = [
-    {regex: /\b(עייף|קשה|אין כוח)\b/, reply: `נשמע קשה, ${name}. האם ניסית להירגע מעט או לקחת הפסקה קצרה?`},
-    {regex: /\b(שמחה|הצלחתי|מרוצה)\b/, reply: `כל הכבוד, ${name}! מה לדעתך גרם להצלחה הזו?`},
-    {regex: /\b(עצוב|מדוכא|כואב)\b/, reply: `אני מצטער לשמוע, ${name}. רוצה לשתף יותר במה קורה?`},
-    {regex: /\b(לחץ|מתוח|לחוצה)\b/, reply: `הלחץ יכול להיות קשה. האם יש משהו מסוים שמייצר לך תחושת סטרס עכשיו?`},
-    {regex: /\b(עצה|טיפ|עזרה)\b/, reply: `בשמחה, ${name}. באיזה תחום היית רוצה לקבל תמיכה היום?`},
-    {regex: /\b(איך|מה)\b/, reply: `שאלה מעניינת, ${name}. תוכל לפרט קצת יותר כדי שאוכל לכוון אותך?`},
-    {regex: /\b(תודה|תודה רבה)\b/, reply: `בשמחה, ${name}! תמיד כאן כשאתה צריך.`},
-    {regex: /\b(שלום|היי|הלו)\b/, reply: `שלום, ${name}! כיצד אפשר לעזור היום?`},
-    {regex: /\b(להיות|להרגיש)\b/, reply: `רגשות הם חלק חשוב. רוצה לספר לי איך אתה מרגיש בפרט?`},
-    {regex: /\b(ילדים|בנים|בנות)\b/, reply: `ילדים יכולים להיות מאתגר... איך הולך עם הילדים שלך?`},
-    {regex: /\b(עבודה|קריירה)\b/, reply: `איך הולך בעבודה? האם יש משהו שברצונך לשפר או לשתף?`},
-    {regex: /\b(בריאות|בריא)\b/, reply: `הבריאות חשובה. האם יש משהו ספציפי שמטריד אותך בנושא הבריאות?`},
-    {regex: /\b(גירושין|גירשנו)\b/, reply: `גירושין הם תהליך מורכב. האם תרצה לדבר על ההיבטים הרגשיים או הפרקטיים?`},
-    {regex: /\b(סטנדאפ|בדיחה)\b/, reply: `אה, סטנדאפ! רוצה עזרה בפיתוח קטע חדש או מעטפת לקטע קיים?`},
-    {regex: /\b(נסיעה|טיול)\b/, reply: `טיולים תמיד מרתקים. לאן אתה מתכנן לנסוע?`}
+    {regex: /(?<!\p{L})(עייף|קשה|אין כוח)(?!\p{L})/u, reply: `נשמע קשה, ${name}. האם ניסית להירגע מעט או לקחת הפסקה קצרה?`},
+    {regex: /(?<!\p{L})(שמחה|הצלחתי|מרוצה)(?!\p{L})/u, reply: `כל הכבוד, ${name}! מה לדעתך גרם להצלחה הזו?`},
+    {regex: /(?<!\p{L})(עצוב|מדוכא|כואב)(?!\p{L})/u, reply: `אני מצטער לשמוע, ${name}. רוצה לשתף יותר במה קורה?`},
+    {regex: /(?<!\p{L})(לחץ|מתוח|לחוצה)(?!\p{L})/u, reply: `הלחץ יכול להיות קשה. האם יש משהו מסוים שמייצר לך תחושת סטרס עכשיו?`},
+    {regex: /(?<!\p{L})(עצה|טיפ|עזרה)(?!\p{L})/u, reply: `בשמחה, ${name}. באיזה תחום היית רוצה לקבל תמיכה היום?`},
+    {regex: /(?<!\p{L})(איך|מה)(?!\p{L})/u, reply: `שאלה מעניינת, ${name}. תוכל לפרט קצת יותר כדי שאוכל לכוון אותך?`},
+    {regex: /(?<!\p{L})(תודה|תודה רבה)(?!\p{L})/u, reply: `בשמחה, ${name}! תמיד כאן כשאתה צריך.`},
+    {regex: /(?<!\p{L})(שלום|היי|הלו)(?!\p{L})/u, reply: `שלום, ${name}! כיצד אפשר לעזור היום?`},
+    // 50+ education-related patterns
+    {regex: /(?<!\p{L})(תלמידים?)(?!\p{L})/u, reply: `איך התקדמת עם התלמידים שלך היום, ${name}?`},
+    {regex: /(?<!\p{L})(מבחן|מבחנים?)(?!\p{L})/u, reply: `איך אתה מתכונן למבחנים המתקרבים?`},
+    {regex: /(?<!\p{L})(שיעור|שיעורים?)(?!\p{L})/u, reply: `מה הנושא של השיעור הבא שלך?`},
+    {regex: /(?<!\p{L})(למידה?)(?!\p{L})/u, reply: `איזה שיטות למידה הכי עובדות עבורך?`},
+    {regex: /(?<!\p{L})(בית ספר|בבית ספר)(?!\p{L})/u, reply: `מה אתה הכי אוהב בבית הספר?`},
+    {regex: /(?<!\p{L})(הוראה)(?!\p{L})/u, reply: `איזה סגנון הוראה אתה מעדיף?`},
+    {regex: /(?<!\p{L})(פרויקט|פרויקטים)(?!\p{L})/u, reply: `מה נושא הפרויקט האחרון שלך?`},
+    {regex: /(?<!\p{L})(מטלת בית|משימת בית)(?!\p{L})/u, reply: `איזה מטלת בית אתגר אותך לאחרונה?`},
+    {regex: /(?<!\p{L})(הערכה)(?!\p{L})/u, reply: `איך אתה מעריך את ההתקדמות של התלמידים?`},
+    {regex: /(?<!\p{L})(ציונים?)(?!\p{L})/u, reply: `האם אתה מרוצה מהציונים של התלמידים?`},
+    {regex: /(?<!\p{L})(סילבוס|תכנית לימודים)(?!\p{L})/u, reply: `איך היית מתכנן סילבוס לשני סמסטרים?`},
+    {regex: /(?<!\p{L})(ניהול זמן|לוח זמנים)(?!\p{L})/u, reply: `איך אתה מדריך תלמידים לניהול זמן?`},
+    {regex: /(?<!\p{L})(מוטיבציה|השראה)(?!\p{L})/u, reply: `מה מעורר בך השראה בתחום החינוך?`},
+    {regex: /(?<!\p{L})(קורס|קורסים)(?!\p{L})/u, reply: `מה הנושאים המרכזיים בקורס שלך?`},
+    {regex: /(?<!\p{L})(סדנא|סדנאות)(?!\p{L})/u, reply: `איך היית בונה סדנא של יום אחד?`},
+    {regex: /(?<!\p{L})(קבוצת למידה|שיתוף פעולה|קבוצתי)(?!\p{L})/u, reply: `כיצד היית מארגן קבוצת למידה אפקטיבית?`},
+    {regex: /(?<!\p{L})(הוראה מרחוק|zoom)(?!\p{L})/u, reply: `אילו כלים אתה משתמש בהוראה מרחוק?`},
+    {regex: /(?<!\p{L})(גיליון עבודה|גיליונות עבודה)(?!\p{L})/u, reply: `איך היית יוצר גיליון עבודה מזמין?`},
+    {regex: /(?<!\p{L})(משוב|feedback)(?!\p{L})/u, reply: `מה הגישה שלך למתן משוב בונה?`},
+    {regex: /(?<!\p{L})(מתמטיקה|שפה|ספרות|היסטוריה|גאוגרפיה|מדעים)(?!\p{L})/u, reply: `כיצד אתה מלח...
   ];
   let reply = `מעניין, ${name}. תוכל לפרט יותר כדי שאוכל לסייע?`;
   for (const p of patterns) {
